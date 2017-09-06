@@ -31,9 +31,25 @@ function createNewActivity(newActivity) {
   return p;
 }
 
+function getAllByActivityName(activityName) {
+  let p = new Promise( (resolve, reject) => {
+    console.log(activityName);
+    Activity.find({activityName: activityName})
+      .then( (docs) => {
+        resolve({status: 'success', data: docs});
+      })
+      .catch( (err) => {
+        reject(err);
+      })
+  })
+
+  return p;
+}
+
 let ActivityController = {
   findAllActivities: findAllActivities,
   createNewActivity: createNewActivity,
+  getAllByActivityName: getAllByActivityName,
 }
 
 module.exports = ActivityController;

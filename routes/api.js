@@ -33,9 +33,17 @@ router.post('/activities', function(req, res, next) {
     })
 });
 
-router.get('/activities/:id', function(req, res, next) {
+router.get('/activities/:name', function(req, res, next) {
 // Show information about one activity I am tracking, and give me the data I have recorded for that activity.
+  let activityName = decodeURI(req.params.name);
 
+  ActivityController.getAllByActivityName(activityName)
+    .then( (result) => {
+      res.json(result);
+    })
+    .catch( (err) => {
+      res.send(err);
+    })
 });
 
 router.put('/activities/:id', function(req, res, next) {
