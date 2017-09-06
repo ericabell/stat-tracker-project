@@ -82,13 +82,25 @@ router.delete('/activities/:name', function(req, res, next) {
 
 });
 
-router.post('/activities/:id/stats', function(req, res, next) {
+router.post('/activities/:name/stats', function(req, res, next) {
 // Add tracked data for a day. The data sent with this should include the day tracked. You can also override the data for a day already recorded.
+  let activityName = decodeURI(req.params.name);
 
+  let date_time = req.body.date_time;
+  let statisticValue = req.body.statisticValue;
+
+  ActivityController.logActivityData(activityName, date_time, statisticValue)
+    .then( (result) => {
+      res.json(result);
+    })
+    .catch( (err) => {
+      res.send(err);
+    })
 });
 
-router.delete('/stats/:id', function(req, res, next) {
+router.delete('/stats/:name', function(req, res, next) {
 // Remove tracked data for a day.
+  let activityName = decodeURI(req.params.name);
 
 });
 

@@ -80,12 +80,36 @@ function deleteActivityByName( activityName ) {
   return p;
 }
 
+function logActivityData( activityName, date_time, statisticValue ) {
+  let p = new Promise( (resolve, reject) => {
+    console.log(activityName);
+    Activity.findOne({activityName: activityName})
+      .then( (doc) => {
+        Activity.create({activityName: activityName,
+                         date_time: new Date(date_time),
+                         statisticName: doc.statisticName,
+                         statisticValue: statisticValue})
+          .then( (docs) => {
+              resolve({status: 'success', data: docs});
+          })
+          .catch( (err) => {
+            reject(err);
+          })
+      })
+
+  })
+
+  return p;
+
+}
+
 let ActivityController = {
   findAllActivities: findAllActivities,
   createNewActivity: createNewActivity,
   getAllByActivityName: getAllByActivityName,
   updateActivityByName: updateActivityByName,
   deleteActivityByName: deleteActivityByName,
+  logActivityData: logActivityData,
 }
 
 module.exports = ActivityController;
