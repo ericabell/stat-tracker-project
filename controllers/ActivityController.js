@@ -46,10 +46,45 @@ function getAllByActivityName(activityName) {
   return p;
 }
 
+function updateActivityByName(activityName, updatedActivity) {
+  let p = new Promise( (resolve, reject) => {
+    Activity.update({activityName: activityName},
+        {
+          $set: {activityName: updatedActivity.activityName},
+          $set: {statisticName: updatedActivity.statisticName}
+        }
+    )
+      .then( (docs) => {
+          resolve({status: 'success', data: docs});
+      })
+      .catch( (err) => {
+        reject(err);
+      })
+  })
+
+  return p;
+}
+
+function deleteActivityByName( activityName ) {
+  let p = new Promise( (resolve, reject) => {
+    Activity.find({activityName: activityName}).remove()
+      .then( (docs) => {
+          resolve({status: 'success', data: docs});
+      })
+      .catch( (err) => {
+        reject(err);
+      })
+  })
+
+  return p;
+}
+
 let ActivityController = {
   findAllActivities: findAllActivities,
   createNewActivity: createNewActivity,
   getAllByActivityName: getAllByActivityName,
+  updateActivityByName: updateActivityByName,
+  deleteActivityByName: deleteActivityByName,
 }
 
 module.exports = ActivityController;

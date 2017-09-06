@@ -15,13 +15,13 @@ router.get('/activities', function(req, res, next) {
 
 router.post('/activities', function(req, res, next) {
 // Create a new activity for me to track.
-  let activity = req.body.activity;
+  let activityName = req.body.activity;
   let date_time = new Date();
   let statisticName = req.body.statisticName;
   let statisticValue = req.body.statisticValue;
 
   let newActivity = {
-    activityName: activity,
+    activityName: activityName,
     date_time: date_time,
     statisticName: statisticName,
     statisticValue: statisticValue
@@ -46,13 +46,38 @@ router.get('/activities/:name', function(req, res, next) {
     })
 });
 
-router.put('/activities/:id', function(req, res, next) {
+router.put('/activities/:name', function(req, res, next) {
 // Update one activity I am tracking, changing attributes such as name or type. Does not allow for changing tracked data.
+  let activityName = decodeURI(req.body.activity);
 
+  let statisticName = req.body.statisticName;
+
+  let updatedActivity = {
+    activityName: req.body.activityName,
+    statisticName: statisticName,
+  }
+
+  ActivityController.updateActivityByName(activityName, updatedActivity)
+    .then( (result) => {
+      res.json(result);
+    })
+    .catch( (err) => {
+      res.send(err);
+    })
 });
 
-router.delete('/activities/:id', function(req, res, next) {
+router.delete('/activities/:name', function(req, res, next) {
 // Delete one activity I am tracking. This should remove tracked data for that activity as well.
+  let activityName = decodeURI(req.params.name);
+
+  console.log(activityName);
+  ActivityController.deleteActivityByName( activityName )
+    .then( (result) => {
+      res.json(result);
+    })
+    .catch( (err) => {
+      res.send(err);
+    })
 
 });
 
