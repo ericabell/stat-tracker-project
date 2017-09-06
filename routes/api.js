@@ -48,12 +48,13 @@ router.get('/activities/:name', function(req, res, next) {
 
 router.put('/activities/:name', function(req, res, next) {
 // Update one activity I am tracking, changing attributes such as name or type. Does not allow for changing tracked data.
-  let activityName = decodeURI(req.body.activity);
+  let activityName = decodeURI(req.params.name);
 
+  let newActivityName = req.body.activityName;
   let statisticName = req.body.statisticName;
 
   let updatedActivity = {
-    activityName: req.body.activityName,
+    activityName: newActivityName,
     statisticName: statisticName,
   }
 

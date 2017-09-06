@@ -48,10 +48,11 @@ function getAllByActivityName(activityName) {
 
 function updateActivityByName(activityName, updatedActivity) {
   let p = new Promise( (resolve, reject) => {
-    Activity.update({activityName: activityName},
+    console.log(updatedActivity);
+    Activity.updateMany({activityName: activityName},
         {
-          $set: {activityName: updatedActivity.activityName},
-          $set: {statisticName: updatedActivity.statisticName}
+          $set: {activityName: updatedActivity.activityName,
+                 statisticName: updatedActivity.statisticName}
         }
     )
       .then( (docs) => {
