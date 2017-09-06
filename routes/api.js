@@ -101,6 +101,15 @@ router.post('/activities/:name/stats', function(req, res, next) {
 router.delete('/stats/:name', function(req, res, next) {
 // Remove tracked data for a day.
   let activityName = decodeURI(req.params.name);
+  let dayToDelete = new Date(req.body.day);
+
+  ActivityController.deleteActivityForDay(activityName, dayToDelete)
+    .then( (result) => {
+      res.json(result);
+    })
+    .catch( (err) => {
+      res.send(err);
+    })
 
 });
 

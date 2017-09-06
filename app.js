@@ -5,6 +5,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
+const BasicStrategy = require('passport-http').BasicStrategy;
 
 var api = require('./routes/api');
 
@@ -29,6 +31,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const users = {
+    'eric': 'e'
+};
+
+passport.use(new BasicStrategy(
+  function(username, password, done) {
+      const userPassword = users[username];
+      if (!userPassword) { return done(null, false); }
+      if (userPassword !== password) { return done(null, false); }
+      return done(null, username);
+  }
+));
+
+app.use(passport.authenticate('basic', {session: false}));
 
 app.use('/api', api);
 

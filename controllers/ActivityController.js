@@ -5,8 +5,11 @@ let ObjectId = require('mongodb').ObjectId
 function findAllActivities () {
   let p = new Promise( (resolve, reject) => {
     Activity.find().distinct('activityName')
-      .then( (doc) => {
-        resolve({status: 'success', data: doc});
+      .then( (docs) => {
+        let activityWithLinks = docs.map( (doc) => {
+          return {name: doc, url: `http://localhost:3000/activities/${doc}`}
+        })
+        resolve({status: 'success', data: activityWithLinks});
       })
       .catch( (err) => {
         reject(err);
@@ -103,6 +106,23 @@ function logActivityData( activityName, date_time, statisticValue ) {
 
 }
 
+function deleteActivityForDay(activityName, dayToDelete) {
+  let p = new Promise( (resolve, reject) => {
+    let startOfDay = dayToDelete.setHours(0,0,0,0);
+    let endOfDay = dayToDelete.setHours(23,59,59,999);
+
+    Activity.find({activityName: activityName, date_time: { $gt: startOfDay, $lt: endOfDay}}).remove()
+      .then( (docs) => {
+          resolve({status: 'success', data: docs});
+      })
+      .catch( (err) => {
+        reject(err);
+      })
+  })
+
+  return p;
+}
+
 let ActivityController = {
   findAllActivities: findAllActivities,
   createNewActivity: createNewActivity,
@@ -110,6 +130,7 @@ let ActivityController = {
   updateActivityByName: updateActivityByName,
   deleteActivityByName: deleteActivityByName,
   logActivityData: logActivityData,
+  deleteActivityForDay: deleteActivityForDay,
 }
 
 module.exports = ActivityController;
