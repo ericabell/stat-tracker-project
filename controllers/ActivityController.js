@@ -4,7 +4,7 @@ let ObjectId = require('mongodb').ObjectId
 
 function findAllActivities () {
   let p = new Promise( (resolve, reject) => {
-    Activity.find({})
+    Activity.find().distinct('activityName')
       .then( (doc) => {
         resolve({status: 'success', data: doc});
       })
