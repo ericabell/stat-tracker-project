@@ -4,9 +4,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+var api = require('./routes/api');
+
+let url='mongodb://localhost:27017/stat-tracker-project';
+mongoose.connect(url,
+                 {useMongoClient: true},
+                 (err)=> {
+                   if(err) throw err;
+                   else {console.log('connection to db successful');}
+                 });
 
 var app = express();
 
@@ -22,8 +30,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
