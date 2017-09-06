@@ -1,10 +1,11 @@
 # Activity Tracking API
 
 Endpoints
+```
 1. GET	/activities	Show a list of all activities I am tracking, and links to their individual pages
 
 Response Example:
-```{
+{
     "status": "success",
     "data": [
         {
@@ -20,7 +21,8 @@ Response Example:
             "url": "http://localhost:3000/activities/biking"
         }
     ]
-}```
+}
+```
 
 2. POST	/activities	Create a new activity for me to track.
 
